@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Mithridatism</title>
     <style>
-        /* Core AMOLED Theme */
+        /* Core Reset & Base */
         body {
-            background-color: #000000;
-            color: #d1d1d1;
+            background-color: #f4f7f6; /* Starts clean for the 'Trap' */
+            color: #111;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.8;
             margin: 0;
@@ -19,63 +19,70 @@
 
         /* The Main Content Container */
         article {
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
-            padding: 10vh 20px 20vh 20px;
+            padding: 10vh 40px 20vh 40px;
             position: relative;
             z-index: 10;
+            background: rgba(0, 0, 0, 0.6); /* Protective layer so you can read */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            margin-top: 5vh;
+            color: #e0e0e0;
+            transition: background 1s ease, box-shadow 1s ease;
         }
 
         section {
-            min-height: 80vh; /* Ensures enough scroll space for transitions */
+            min-height: 80vh;
             margin-bottom: 10vh;
-            opacity: 0.3;
-            transition: opacity 1s ease, transform 1s ease;
-            transform: translateY(20px);
+            opacity: 0.2;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: scale(0.95);
         }
 
-        /* Active section highlights */
         section.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: scale(1);
         }
 
         h1 {
             color: #ffffff;
-            font-weight: 300;
+            font-weight: 900;
             letter-spacing: 4px;
             text-transform: uppercase;
             text-align: center;
-            border-bottom: 1px solid #222;
+            border-bottom: 2px solid #555;
             padding-bottom: 20px;
             margin-bottom: 10vh;
-            font-size: 2.2em;
+            font-size: 2.5em;
         }
 
         h2 {
             color: #ffffff;
-            font-weight: 400;
+            font-weight: 700;
             letter-spacing: 2px;
             margin-top: 0;
             margin-bottom: 30px;
-            font-size: 1.4em;
+            font-size: 1.6em;
+            text-transform: uppercase;
         }
 
         p {
             margin-bottom: 24px;
             text-align: justify;
-            font-weight: 300;
-            font-size: 1.05em;
+            font-weight: 400;
+            font-size: 1.1em;
         }
 
         em {
-            color: #ffffff;
-            font-style: italic;
+            color: #ff3366; /* Accent color for concepts */
+            font-style: normal;
+            font-weight: bold;
         }
 
         /* --- VISUAL EFFECTS LAYER --- */
-        
-        /* Background Container */
         #visual-layer {
             position: fixed;
             top: 0;
@@ -87,60 +94,125 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         /* Glitch Text for Alchemy of Noise */
         .noise-text {
             position: absolute;
-            color: #333;
-            font-family: monospace;
-            font-size: 0.8em;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.2em;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            white-space: nowrap;
         }
 
         /* Massive Background Text for Isolation */
         #bg-word {
-            font-size: 25vw;
-            color: #ffffff;
+            font-size: 30vw;
+            color: #ff003c;
             opacity: 0;
             font-weight: 900;
-            letter-spacing: -5px;
-            transition: opacity 2s ease;
+            letter-spacing: -10px;
             text-transform: uppercase;
+            display: none;
         }
 
-        /* State-based CSS controlled by JS */
+        /* =========================================
+           STATE-BASED CSS (Triggered by Scroll)
+           ========================================= */
+
+        /* 1. TRAP: Clean, bright, deceiving */
+        body[data-state="trap"] {
+            background-color: #eef2f5;
+        }
+        body[data-state="trap"] article {
+            background: rgba(255, 255, 255, 0.8);
+            color: #111;
+        }
+        body[data-state="trap"] h1, body[data-state="trap"] h2 {
+            color: #000;
+            border-color: #ccc;
+        }
+
+        /* 2. CYP450: Toxic Poison Ingestion */
+        body[data-state="cyp450"] {
+            background-color: #0a120a;
+            animation: toxicPulse 2s infinite alternate;
+        }
+        @keyframes toxicPulse {
+            0% { box-shadow: inset 0 0 50px #00ff00; background-color: #051005; }
+            100% { box-shadow: inset 0 0 150px #1a4a1a; background-color: #112211; }
+        }
+
+        /* 3. ALCHEMY: Hardcore Glitch & Noise */
+        body[data-state="alchemy"] {
+            background-color: #000;
+        }
+        body[data-state="alchemy"] article {
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.3);
+        }
         body[data-state="alchemy"] .noise-text {
-            animation: glitch 3s infinite alternate;
+            animation: brutalGlitch 0.4s infinite;
+            display: block;
+        }
+        
+        @keyframes brutalGlitch {
+            0% { opacity: 1; transform: translate(0, 0); color: #00ff00; text-shadow: 2px 0 red, -2px 0 blue; }
+            20% { transform: translate(-10px, 10px); color: #fff; }
+            40% { opacity: 0.8; transform: translate(10px, -10px); color: #ff003c; text-shadow: none; }
+            60% { transform: translate(5px, 5px); color: #00ff00; }
+            80% { opacity: 1; transform: translate(-10px, -5px); color: #fff; text-shadow: 3px 0 red; }
+            100% { transform: translate(0, 0); color: #ff003c; }
         }
 
+        /* 4. ISOLATION: Crushing, flashing STOP */
+        body[data-state="isolation"] {
+            background-color: #1a1a1a;
+        }
         body[data-state="isolation"] #bg-word {
-            opacity: 0.03; /* Barely visible STOP */
+            display: block;
+            animation: panicFlash 3s infinite;
+        }
+        body[data-state="isolation"] article {
+            transform: scale(0.9);
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+        }
+        
+        @keyframes panicFlash {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.4; text-shadow: 0 0 20px red; transform: scale(1.05); }
+            55% { opacity: 0.1; transform: scale(1); }
+            100% { opacity: 0.1; }
         }
 
-        @keyframes glitch {
-            0% { opacity: 0; transform: translate(0, 0); }
-            20% { opacity: 0.8; transform: translate(-10px, 5px); }
-            40% { opacity: 0; transform: translate(10px, -5px); }
-            60% { opacity: 0.5; transform: translate(-5px, 10px); }
-            80% { opacity: 0; transform: translate(5px, -10px); }
-            100% { opacity: 0.9; transform: translate(0, 0); }
+        /* 5. SYNTHESIS: Pure AMOLED Black, Warm Text */
+        body[data-state="synthesis"] {
+            background-color: #000000;
+        }
+        body[data-state="synthesis"] article {
+            background: transparent;
+            box-shadow: none;
+            color: #f4d0a4; /* Warm, human tint */
+        }
+        body[data-state="synthesis"] h2 {
+            color: #ffffff;
         }
     </style>
 </head>
-<body>
+<body data-state="trap">
 
     <!-- Visual Layer for Background Effects -->
     <div id="visual-layer">
         <div id="bg-word">STOP</div>
-        <!-- Noise nodes will be injected here by JS -->
+        <!-- Noise nodes injected by JS -->
     </div>
 
     <article>
         <h1>Digital Mithridatism</h1>
 
-        <section id="trap">
+        <section id="trap" class="active">
             <h2>The Frictionless Trap</h2>
             <p>Despite its aging, the digital landscape remains a veiled mystery for most. People’s access to its basic features is now easier than ever. But in order for technology to lower its barrier of entry, sacrifices had to be made. Personal computers and laptops are used less and less as phones and tablets appear to be more attractive. Navigating inside iOS, iPadOS and Android is very easy, the OS’s having the least amount of friction compared to MacOS, Windows and the myriad of Linux distros plaguing the market. As such, the average user understands only the bare minimum they need in order to achieve their goals and complete their tasks, they neither understand nor look for the “why” and the “how” of its inner workings. They know how to open a browser and they barely understand how to look for things.</p>
             <p>More and more people have heard that various Silicon Valley giants are using their data to form a digital profile of this individual, akin to <em>Serial Experiments Lain</em>, an avatar, a mask that’s both window and mirror, whose purpose is to look as much as it can like you. Our data is being sold, of that much most have become aware and after a 15 second outrage, apathetic to. But what if you could bring the value of your data close to zero, or even better, invert its value?</p>
@@ -178,26 +250,35 @@
     </article>
 
     <script>
-        // Data nodes representing the "noise" injected by the script
-        const noiseWords = ["> solar_yield: 585W", "> query: medieval_lit", "> lang: ZH_YCT2", "> location: spoofed", "> CV_pipeline: static", "> auth: bypass", "> shadow_profile: NaN"];
+        // Highly personalized noise words for the aggressive glitch effect
+        const noiseWords = [
+            "> query: kierkegaard_despair", 
+            "> cv_pipeline: isolate_static", 
+            "> fragrance_note: tobacco_leather", 
+            "> solar_yield: 585W_anomaly", 
+            "> target: etat_libre_d_orange", 
+            "> display_req: amoled_pure_black", 
+            "> read: milton_epic", 
+            "> shadow_profile: NaN",
+            "> cartesian_core: bypass"
+        ];
+        
         const visualLayer = document.getElementById('visual-layer');
 
-        // Generate noise elements dynamically
-        for (let i = 0; i < 15; i++) {
+        // Generate 25 aggressive noise elements
+        for (let i = 0; i < 25; i++) {
             let span = document.createElement('span');
             span.className = 'noise-text';
             span.innerText = noiseWords[Math.floor(Math.random() * noiseWords.length)];
-            span.style.top = Math.random() * 90 + 'vh';
             
-            // Push to sides so it doesn't overlap reading text
-            let isLeft = Math.random() > 0.5;
-            if (isLeft) {
-                span.style.left = (Math.random() * 15) + 'vw';
-            } else {
-                span.style.right = (Math.random() * 15) + 'vw';
-            }
+            // Random positioning everywhere
+            span.style.top = (Math.random() * 100) + 'vh';
+            span.style.left = (Math.random() * 90) + 'vw';
             
-            span.style.animationDelay = (Math.random() * 2) + 's';
+            // Randomize glitch speed and scale
+            span.style.animationDuration = (Math.random() * 0.5 + 0.1) + 's';
+            span.style.transform = `scale(${Math.random() * 1.5 + 0.5})`;
+            
             visualLayer.appendChild(span);
         }
 
@@ -206,18 +287,15 @@
         
         const observerOptions = {
             root: null,
-            rootMargin: '0px',
-            threshold: 0.5 // Triggers when 50% of the section is visible
+            rootMargin: '-20% 0px -40% 0px', // Triggers more accurately as you read
+            threshold: 0
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Highlight current text
                     sections.forEach(sec => sec.classList.remove('active'));
                     entry.target.classList.add('active');
-
-                    // Change body state to trigger background CSS animations
                     document.body.setAttribute('data-state', entry.target.id);
                 }
             });
